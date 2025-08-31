@@ -3,7 +3,7 @@
 import { useState, useRef } from 'react';
 import { observer } from 'mobx-react-lite';
 import { memoryStore } from '../stores/MemoryStore';
-import { X, Upload, Calendar, FileText, Image } from 'lucide-react';
+import { CloseOutlined, UploadOutlined, CalendarOutlined, FileTextOutlined, PictureOutlined } from '@ant-design/icons';
 
 interface AddEventModalProps {
   isOpen: boolean;
@@ -81,71 +81,72 @@ const AddEventModal = observer(({ isOpen, onClose }: AddEventModalProps) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between p-6 border-b">
-          <h2 className="text-xl font-semibold text-gray-800">Добавить событие</h2>
+    <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
+      <div className="bg-gray-800 rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto border border-gray-700">
+        <div className="flex items-center justify-between p-6 border-b border-gray-700">
+
+          <h2 className="text-xl font-semibold text-white">Добавить событие</h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 transition-colors"
+            className="text-gray-400 hover:text-white transition-colors"
           >
-            <X size={24} />
+            <CloseOutlined style={{ fontSize: '24px' }} />
           </button>
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           {/* Title */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-300 mb-2">
               Название события *
             </label>
             <input
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.title ? 'border-red-500' : 'border-gray-300'
+              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-700 text-white placeholder-gray-400 ${errors.title ? 'border-red-500' : 'border-gray-600'
                 }`}
               placeholder="Введите название события"
             />
             {errors.title && (
-              <p className="text-red-500 text-sm mt-1">{errors.title}</p>
+              <p className="text-red-400 text-sm mt-1">{errors.title}</p>
             )}
           </div>
 
           {/* Date */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-300 mb-2">
               Дата *
             </label>
             <input
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.date ? 'border-red-500' : 'border-gray-300'
+              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-700 text-white ${errors.date ? 'border-red-500' : 'border-gray-600'
                 }`}
             />
             {errors.date && (
-              <p className="text-red-500 text-sm mt-1">{errors.date}</p>
+              <p className="text-red-400 text-sm mt-1">{errors.date}</p>
             )}
           </div>
 
           {/* Description */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-300 mb-2">
               Описание (необязательно)
             </label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={3}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-700 text-white placeholder-gray-400"
               placeholder="Добавьте описание события..."
             />
           </div>
 
           {/* Photos */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-300 mb-2">
               Фотографии * (максимум 3)
             </label>
 
@@ -153,10 +154,10 @@ const AddEventModal = observer(({ isOpen, onClose }: AddEventModalProps) => {
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="w-full border-2 border-dashed border-gray-300 rounded-lg p-4 hover:border-blue-500 transition-colors"
+                className="w-full border-2 border-dashed border-gray-600 rounded-lg p-4 hover:border-blue-500 transition-colors bg-gray-700"
               >
-                <div className="flex flex-col items-center text-gray-500">
-                  <Upload size={24} className="mb-2" />
+                <div className="flex flex-col items-center text-gray-400">
+                  <UploadOutlined style={{ fontSize: '24px' }} className="mb-2" />
                   <span>Загрузить фотографии</span>
                 </div>
               </button>
@@ -185,7 +186,7 @@ const AddEventModal = observer(({ isOpen, onClose }: AddEventModalProps) => {
                       onClick={() => removePhoto(index)}
                       className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600 transition-colors"
                     >
-                      <X size={12} />
+                      <CloseOutlined style={{ fontSize: '12px' }} />
                     </button>
                   </div>
                 ))}
@@ -193,7 +194,7 @@ const AddEventModal = observer(({ isOpen, onClose }: AddEventModalProps) => {
             )}
 
             {errors.photos && (
-              <p className="text-red-500 text-sm mt-1">{errors.photos}</p>
+              <p className="text-red-400 text-sm mt-1">{errors.photos}</p>
             )}
           </div>
 
@@ -202,7 +203,7 @@ const AddEventModal = observer(({ isOpen, onClose }: AddEventModalProps) => {
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+              className="flex-1 px-4 py-2 border border-gray-600 rounded-lg text-gray-300 hover:bg-gray-700 transition-colors"
             >
               Отмена
             </button>
@@ -215,7 +216,7 @@ const AddEventModal = observer(({ isOpen, onClose }: AddEventModalProps) => {
           </div>
         </form>
       </div>
-    </div>
+    </div >
   );
 });
 

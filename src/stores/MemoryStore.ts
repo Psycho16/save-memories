@@ -11,10 +11,15 @@ export interface MemoryEvent {
 
 class MemoryStore {
   events: MemoryEvent[] = [];
+  isHydrated = false;
 
   constructor() {
     makeAutoObservable(this);
-    this.loadFromLocalStorage();
+    // Загружаем данные только на клиенте
+    if (typeof window !== 'undefined') {
+      this.loadFromLocalStorage();
+      this.isHydrated = true;
+    }
   }
 
   addEvent = (event: Omit<MemoryEvent, 'id' | 'createdAt'>) => {
@@ -46,12 +51,17 @@ class MemoryStore {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('memoryEvents');
       if (saved) {
-        const parsed = JSON.parse(saved);
-        this.events = parsed.map((event: any) => ({
-          ...event,
-          date: new Date(event.date),
-          createdAt: new Date(event.createdAt),
-        }));
+        try {
+          const parsed = JSON.parse(saved);
+          this.events = parsed.map((event: any) => ({
+            ...event,
+            date: new Date(event.date),
+            createdAt: new Date(event.createdAt),
+          }));
+        } catch (error) {
+          console.error('Error loading from localStorage:', error);
+          this.events = [];
+        }
       }
     }
   };
