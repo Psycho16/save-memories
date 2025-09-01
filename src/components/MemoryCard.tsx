@@ -23,9 +23,11 @@ const MemoryCard = observer(({ event, onDelete, onView }: MemoryCardProps) => {
   };
 
   const handlePhotoClick = (index: number) => {
+    console.log('index 1', index)
     setPhotoIndex(index);
     setPhotoViewerOpen(true);
   };
+  console.log('photoIndex', photoIndex)
 
   return (
     <>
@@ -35,15 +37,16 @@ const MemoryCard = observer(({ event, onDelete, onView }: MemoryCardProps) => {
           {event.photos.length > 0 ? (
             <div className="grid grid-cols-3 gap-1 p-1">
               {event.photos.slice(0, 3).map((photo, index) => (
-                <div key={index} className="aspect-square overflow-hidden relative group">
+                <div key={index} className="aspect-square overflow-hidden relative group cursor-pointer" onClick={() => handlePhotoClick(index)}>
                   <img
                     src={photo}
                     alt={`Фото ${index + 1}`}
-                    className="w-full h-full object-cover cursor-pointer transition-transform group-hover:scale-105"
-                    onClick={() => handlePhotoClick(index)}
+                    className="w-full h-full object-cover transition-transform group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all flex items-center justify-center">
-                    <EyeOutlined style={{ fontSize: '24px', color: 'white', opacity: 0 }} className="group-hover:opacity-100 transition-opacity" />
+                    <EyeOutlined style={{
+                      fontSize: '24px', color: 'white'
+                    }} className="group-hover:opacity-100 transition-opacity" />
                   </div>
                 </div>
               ))}
@@ -66,19 +69,12 @@ const MemoryCard = observer(({ event, onDelete, onView }: MemoryCardProps) => {
         </div>
 
         {/* Content */}
-        <div className="p-4">
+        <div className="p-4 cursor-pointer" onClick={() => onView(event.id)}>
           <div className="flex items-start justify-between mb-3">
             <h3 className="text-lg font-semibold text-white line-clamp-2">
               {event.title}
             </h3>
             <div className="flex gap-2">
-              <button
-                onClick={() => onView(event.id)}
-                className="text-gray-400 hover:text-blue-400 transition-colors p-1"
-                title="Просмотреть событие"
-              >
-                <EyeOutlined style={{ fontSize: '16px' }} />
-              </button>
               <button
                 onClick={() => onDelete(event.id)}
                 className="text-gray-400 hover:text-red-400 transition-colors p-1"
@@ -105,7 +101,8 @@ const MemoryCard = observer(({ event, onDelete, onView }: MemoryCardProps) => {
       {/* Photo Viewer */}
       <PhotoViewer
         photos={event.photos}
-        initialIndex={photoIndex}
+        activeIndex={photoIndex}
+        setPhotoIndex={setPhotoIndex}
         isOpen={photoViewerOpen}
         onClose={() => setPhotoViewerOpen(false)}
       />

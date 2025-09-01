@@ -1,26 +1,27 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, SetStateAction, Dispatch } from 'react';
 import { CloseOutlined, LeftOutlined, RightOutlined } from '@ant-design/icons';
 
 interface PhotoViewerProps {
   photos: string[];
-  initialIndex?: number;
+  setPhotoIndex: Dispatch<SetStateAction<number>>;
+  activeIndex: number;
   isOpen: boolean;
   onClose: () => void;
 }
 
-const PhotoViewer = ({ photos, initialIndex = 0, isOpen, onClose }: PhotoViewerProps) => {
-  const [currentIndex, setCurrentIndex] = useState(initialIndex);
+const PhotoViewer = ({ photos, activeIndex, setPhotoIndex, isOpen, onClose }: PhotoViewerProps) => {
+  // const [currentIndex, setCurrentIndex] = useState(initialIndex);
 
   if (!isOpen || photos.length === 0) return null;
 
   const goToPrevious = () => {
-    setCurrentIndex((prev) => (prev === 0 ? photos.length - 1 : prev - 1));
+    setPhotoIndex((prev) => (prev === 0 ? photos.length - 1 : prev - 1));
   };
 
   const goToNext = () => {
-    setCurrentIndex((prev) => (prev === photos.length - 1 ? 0 : prev + 1));
+    setPhotoIndex((prev) => (prev === photos.length - 1 ? 0 : prev + 1));
   };
 
   const handleKeyDown = (e: KeyboardEvent) => {
@@ -28,7 +29,7 @@ const PhotoViewer = ({ photos, initialIndex = 0, isOpen, onClose }: PhotoViewerP
     if (e.key === 'ArrowLeft') goToPrevious();
     if (e.key === 'ArrowRight') goToNext();
   };
-
+  console.log('photoIndexcurrentIndex', activeIndex)
   return (
     <div
       className="fixed inset-0 bg-black bg-opacity-95 flex items-center justify-center z-50"
@@ -73,8 +74,8 @@ const PhotoViewer = ({ photos, initialIndex = 0, isOpen, onClose }: PhotoViewerP
           onClick={(e) => e.stopPropagation()}
         >
           <img
-            src={photos[currentIndex]}
-            alt={`Фото ${currentIndex + 1}`}
+            src={photos[activeIndex]}
+            alt={`Фото ${activeIndex + 1}`}
             className="max-w-full max-h-[80vh] object-contain"
           />
         </div>
@@ -82,7 +83,7 @@ const PhotoViewer = ({ photos, initialIndex = 0, isOpen, onClose }: PhotoViewerP
         {/* Photo counter */}
         {photos.length > 1 && (
           <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white text-sm">
-            {currentIndex + 1} / {photos.length}
+            {activeIndex + 1} / {photos.length}
           </div>
         )}
       </div>

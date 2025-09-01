@@ -49,6 +49,7 @@ const EventPage = observer(({ params }: EventPageProps) => {
   };
 
   const handlePhotoClick = (index: number) => {
+    console.log('photoIndex 2', photoIndex)
     setPhotoIndex(index);
     setPhotoViewerOpen(true);
   };
@@ -136,7 +137,8 @@ const EventPage = observer(({ params }: EventPageProps) => {
         {/* Photo Viewer */}
         <PhotoViewer
           photos={event.photos}
-          initialIndex={photoIndex}
+          activeIndex={photoIndex}
+          setPhotoIndex={setPhotoIndex}
           isOpen={photoViewerOpen}
           onClose={() => setPhotoViewerOpen(false)}
         />
